@@ -9,5 +9,7 @@ import { RouterView } from 'vue-router'
 </template>
 
 <style>
-
+  * {
+    background-color: #212121;
+  }
 </style>

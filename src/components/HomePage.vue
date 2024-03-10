@@ -12,6 +12,7 @@ export default {
         <RouterLink to="/music">Chercher une musique</RouterLink>
       </nav>
   </div>
+  <img src="../assets/homepage.png">
 </template>
 
 <style>
