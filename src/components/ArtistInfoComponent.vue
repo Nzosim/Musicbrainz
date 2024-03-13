@@ -1,3 +1,6 @@
+<!-- 
+	ArtistInfoComponent est une page qui permet d'afficher les informations d'un artiste en fonction de l'id de l'artiste'
+ -->
 <template>
 	<HeaderComponent songOrArtist='artist' />
 
@@ -58,23 +61,25 @@ import HeaderComponent from './HeaderComponent.vue'
 export default {
 	data() {
 		return {
-			id: this.$route.params.id,
+			id: this.$route.params.id, // id de l'artiste récupéré dans l'url
 			errored: false,
 			loading: true,
 			artist: [],
 			musicParAlbum: []
 		}
 	},
+	/**
+	 * Récupère les informations de l'artiste en fonction de l'id de l'artiste
+	 * à la création du composant
+	 */
 	created() {
 		let url = `https://musicbrainz.org/ws/2/artist/${this.id}?inc=aliases+recordings+releases+tags+ratings&fmt=json`;
 		axios
 			.get(url)
 			.then(response => {
 				this.artist = response.data
-				console.log(response.data)
 			})
 			.catch(error => {
-				console.log("erreur : " + error)
 				this.errored = true
 			})
 			.finally(() => {

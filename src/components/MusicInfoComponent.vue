@@ -1,3 +1,6 @@
+<!-- 
+    MusicInfoComponent est une page qui permet d'afficher les informations d'une musique en fonction de l'id de la musique
+ -->
 <template>
     <HeaderComponent songOrArtist='song'/>
 
@@ -18,7 +21,7 @@
                 <p>Durée : {{ msToMinSec(music.length) }}</p>
                 <p>Album : {{ music['releases'][0]['title'] }}</p>
                 <p>Date de sortie : {{ music['releases'][0]['date'] }}</p>
-                <p>Pays de sortie : {{ music['releases'][0]['release-events'][0]['area']['name'] }}</p>
+                <p v-if="music['releases'][0]['release-events'][0]['area']">Pays de sortie : {{ music['releases'][0]['release-events'][0]['area']['name'] }}</p>
             </div>
         </div>
     </section>
@@ -31,12 +34,16 @@ import axios from 'axios';
 export default {
     data() {
         return {
-            id: this.$route.params.id,
+            id: this.$route.params.id, // id de la musique récupéré dans l'url
             errored: false,
             loading: true,
             music: [],
         }
     },
+    /**
+     * Récupère les informations de la musique en fonction de l'id de la musique
+     * à la création du composant
+     */
     created() {
       let url = `https://musicbrainz.org/ws/2/recording/${this.id}?inc=artists+releases&fmt=json`;
       axios
@@ -45,15 +52,16 @@ export default {
             this.music = response.data
         })
         .catch(error => {
-            console.log("erreur : " + error)
             this.errored = true
         })
         .finally(() => {
           this.loading = false
-          console.log(this.music)
         })
     },
     methods: {
+        /**
+         * Convertit les millisecondes en minutes et secondes
+         */
         msToMinSec(ms) {
             let minutes = Math.floor(ms / 60000);
             let seconds = ((ms % 60000) / 1000).toFixed(0);

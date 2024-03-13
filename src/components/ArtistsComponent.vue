@@ -1,8 +1,12 @@
+<!-- 
+  ArtistsComponent.vue est un composant qui affiche les artistes en fonction de la recherche effectuée
+ -->
 <template>
-  <HeaderComponent songOrArtist='artist' @searchInfo="recept" />
+  <!-- Header, l'event updateInfo permet de récupérer les données lorsque la recherche provient d'une autre page -->
+  <HeaderComponent ongOrArtist='artist' @updateInfo="fetchSearchInfo" />
 
   <section>
-      <div v-if="artists.length > 0">
+      <div v-if="artists && artists.length > 0">
           <h1>Artistes</h1>
           <v-table theme="dark" class="table" hover>
             <thead>
@@ -49,17 +53,32 @@ export default {
     }
   },
   methods: {
+    /**
+     * Convertit les millisecondes en minutes et secondes
+     */
     msToMinSec(ms) {
       let minutes = Math.floor(ms / 60000);
       let seconds = ((ms % 60000) / 1000).toFixed(0);
       return minutes + ":" + (seconds < 10 ? '0' : '') + seconds;
     },
-    recept(data) {
-      this.artists = data;
+    /**
+     * Récupère les informations de recherche dans le localStorage
+     * les informations de recherche sont stockées dans le localStorage lorsqu'une recherche est effectuée
+     * car nous changons de page et qu'il n'est pas possible de passer des données dans l'url
+     */
+    fetchSearchInfo() {
+      this.artists = JSON.parse(localStorage.getItem('searchInfo'));
+      localStorage.removeItem('searchInfo');
     }
   },
   components: {
 		HeaderComponent
-	}
+	},
+  /**
+   * Récupère les informations de recherche lors du montage du composant
+   */
+  mounted() {
+    this.fetchSearchInfo(); 
+  }
 }
 </script>
