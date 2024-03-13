@@ -1,5 +1,6 @@
 <template>
-    <a href="/">Home</a>
+    <HeaderComponent songOrArtist='song'/>
+
     <section v-if="errored">
       <p>Désolé, nous n'avons pas pu accéder au serveur de données pour le moment, réessayez plus tard</p>
     </section>
@@ -8,19 +9,23 @@
         <div v-if="loading">Chargement en cours ...</div>
 
         <div v-else>
-            <div>
+            <div class="music-info">
                 <h1>{{ music.title }}</h1>
-                <p>{{ msToMinSec(music.length) }}</p>
-                <p>{{ music['artist-credit'][0]['artist']['name'] }}</p>
-                <p>{{ music['releases'][0]['title'] }}</p>
-                <p>{{ music['releases'][0]['date'] }}</p>
-                <p>{{ music['releases'][0]['release-events'][0]['area']['name'] }}</p>
+                <p class="first-p">
+                    Artiste :
+                    <RouterLink :to="`/artist/${music['artist-credit'][0]['artist']['id']}`" class="btn">{{ music['artist-credit'][0]['artist']['name'] }}</RouterLink>
+                </p>
+                <p>Durée : {{ msToMinSec(music.length) }}</p>
+                <p>Album : {{ music['releases'][0]['title'] }}</p>
+                <p>Date de sortie : {{ music['releases'][0]['date'] }}</p>
+                <p>Pays de sortie : {{ music['releases'][0]['release-events'][0]['area']['name'] }}</p>
             </div>
         </div>
     </section>
 </template> 
 
 <script>
+import HeaderComponent from './HeaderComponent.vue'
 import axios from 'axios';
 
 export default {
@@ -54,6 +59,32 @@ export default {
             let seconds = ((ms % 60000) / 1000).toFixed(0);
             return minutes + ":" + (seconds < 10 ? '0' : '') + seconds;
         },
-    }
+    },
+    components: {
+		HeaderComponent
+	}
 }
 </script>
+
+<style scoped>
+    h1 {
+        padding: 0;
+        color: rgb(192, 192, 192);
+    }
+    
+    .music-info {
+        margin: 30px;
+        color: rgb(192, 192, 192);
+    }
+
+    .first-p {
+        margin-top: 25px;
+    }
+
+    .btn {
+        color: black;
+        background: white;
+        padding: 3px;
+        border-radius: 5px;
+    }
+</style>
