@@ -43,6 +43,7 @@ export default {
     /**
      * Récupère les informations de la musique en fonction de l'id de la musique
      * à la création du composant
+     * @param {String} id - l'id de la musique
      */
     created() {
       let url = `https://musicbrainz.org/ws/2/recording/${this.id}?inc=artists+releases&fmt=json`;
@@ -61,8 +62,10 @@ export default {
     methods: {
         /**
          * Convertit les millisecondes en minutes et secondes
+         * @param {Number} ms - les millisecondes à convertir
          */
         msToMinSec(ms) {
+            if(!ms) return 'Inconnu'; // si la durée est inconnue
             let minutes = Math.floor(ms / 60000);
             let seconds = ((ms % 60000) / 1000).toFixed(0);
             return minutes + ":" + (seconds < 10 ? '0' : '') + seconds;

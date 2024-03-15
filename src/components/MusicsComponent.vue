@@ -55,8 +55,10 @@ export default {
   methods: {
     /**
      * Convertit les millisecondes en minutes et secondes
+     * @param {Number} ms - les millisecondes à convertir
      */
     msToMinSec(ms) {
+      if(!ms) return 'Inconnu'; // si la durée est inconnue
       let minutes = Math.floor(ms / 60000);
       let seconds = ((ms % 60000) / 1000).toFixed(0);
       return minutes + ":" + (seconds < 10 ? '0' : '') + seconds;
